@@ -1,0 +1,26 @@
+# Select the appropriate service types by commenting out or deleting the unwanted type
+# Replace all dockertest and <REPLACEME> fields
+# POC Only: If you need to be able to connect to your service over a VPN to test the gRPC endpoints:
+# Ops will configure the LoadBalancer.  Include this information in the Zendesk ticket.
+apiVersion: v1
+kind: Service
+metadata:
+  labels:
+    app: app
+  name: app
+  namespace: dockertest
+spec:
+  ports:
+  - name: server-port
+    port: 3000
+    protocol: TCP
+    targetPort: 3000
+  selector:
+    app: dockertest
+  sessionAffinity: None
+  type: ClusterIP
+  # type: NodePort
+  # type: LoadBalancer
+  # loadBalancerSourceRanges:
+  # - 0.0.0.0
+  # - ...

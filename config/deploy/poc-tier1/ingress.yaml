@@ -1,0 +1,20 @@
+# Ingress is only used for webapps, and must be used in conjunction with a service type Nodeport
+# Replace all dockertest and <REPLACEME> fields
+apiVersion: extensions/v1beta1
+kind: Ingress
+metadata:
+  annotations:
+    kubernetes.io/ingress.allow-http: "false"
+    kubernetes.io/ingress.global-static-ip-name: "apps-dockertest"
+  name: dockertest
+  namespace: dockertest
+spec:
+  rules:
+  - host: dockertest.dev.one.market
+    http:
+      paths:
+      - backend:
+          serviceName: app
+          servicePort: 3000
+  tls:
+  - secretName: star-dev-one-market

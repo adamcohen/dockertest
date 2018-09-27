@@ -1,0 +1,92 @@
+# Replace all dockertest and <REPLACEME> fields
+# Uncomment the cloudsql-proxy if your application uses a postgres database
+# The `containerPort` opens a port for use by the Pods.
+# Your containerPort must correspond to the spec:Port section of your service.yaml
+# pick the database instance name in <ops|eng|data> to either ops, eng, or data
+
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  labels:
+    app: dockertest
+  name: dockertest
+  namespace: dockertest
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: dockertest
+  strategy:
+    rollingUpdate:
+      maxSurge: 1
+      maxUnavailable: 1
+    type: RollingUpdate
+  template:
+    metadata:
+      labels:
+        app: dockertest
+      name: dockertest
+    spec:
+      containers:
+      - name: app
+        image: gcr.io/poc-tier1/dockertest:<%= current_sha %>
+        imagePullPolicy: Never
+        envFrom:
+        - configMapRef:
+            name: app-env
+        - secretRef:
+            name: app-secrets
+            optional: false
+        ports:
+        - containerPort: 3000
+          protocol: TCP
+        readinessProbe:
+          failureThreshold: 3
+          httpGet:
+            path: /status
+            port: 3000
+            scheme: HTTP
+          initialDelaySeconds: 15
+          periodSeconds: 10
+          successThreshold: 1
+          timeoutSeconds: 1
+        livenessProbe:
+          failureThreshold: 3
+          httpGet:
+            path: /status
+            port: 3001
+            scheme: HTTP
+          initialDelaySeconds: 20
+          periodSeconds: 10
+          successThreshold: 1
+          timeoutSeconds: 1
+        resources:
+          limits:
+            memory: 512Mi
+          requests:
+            memory: 256Mi
+#      - name: cloudsql-proxy
+#        image: gcr.io/cloudsql-docker/gce-proxy:1.09
+#        command: [/cloud_sql_proxy, --dir=/cloudsql, '-instances=poc-tier1:us-central1:<ops|eng|data>=tcp:5432',
+#          -credential_file=/secrets/cloudsql/credentials.json]
+#        volumeMounts:
+#        - name: cloudsql-instance-credentials
+#          mountPath: /secrets/cloudsql
+#          readOnly: true
+#        - name: ssl-certs
+#          mountPath: /etc/ssl/certs
+#        - name: cloudsql
+#          mountPath: /cloudsql
+#      volumes:
+#      - name: cloudsql-instance-credentials
+#        secret:
+#          secretName: cloudsql-instance-credentials
+#      - name: ssl-certs
+#        hostPath:
+#          path: /etc/ssl/certs
+#      - name: cloudsql
+#        emptyDir: null
+      dnsPolicy: ClusterFirst
+      restartPolicy: Always
+      securityContext: {}
+      terminationGracePeriodSeconds: 30

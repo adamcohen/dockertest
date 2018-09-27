@@ -1,0 +1,45 @@
+#edit appname on line 5 and 6
+
+config/deploy
+
+# appname
+dockertest
+
+config/deploy
+
+## nodejs
+.npm
+node_modules
+public/css
+public/js
+.npmrc
+
+## secrets
+*.crt
+*.key
+
+## artifacts
+*.log
+*[Dd]ocker*
+.docker*
+.git*
+Jenkinsfile
+Makefile
+auth.json
+ci
+
+## docs
+*-sample
+*.md
+
+## ide
+*.swp
+.idea
+out
+
+## macos
+.DS_Store
+.Trashes
+
+# omdeploy
+omdeploy*/

@@ -1,0 +1,11 @@
+# Configure non secret environmental variables here, such as the ports that your service responds on
+# Simply add a new line with your `KEY` and `VALUE`
+# Match the namespace defined in namespce.yaml by the dockertest
+apiVersion: v1
+data:
+  ENV_VAR1: "<REPLACEME>"
+  ENV_VAR2: "<REPLACEME>"
+kind: ConfigMap
+metadata:
+  name: app-env
+  namespace: dockertest
