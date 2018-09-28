@@ -10,15 +10,18 @@ ENV APP=dockertest
 ## nodejs
 WORKDIR /usr/src/app
 
-COPY . .
+# OS Stuff 
+RUN apk update >/dev/null \
+    && apk add --no-cache bash \
+    && apk --no-cache add git make python g++ libc6-compat >/dev/null 
+
+# Copy just the package.json, so we can install dependencies
+COPY package.json package.json 
 
 ARG NPM_TOKEN=""
 ARG OPS_NPM_TOKEN=""
 
-RUN apk update >/dev/null \
-    && apk add --no-cache bash \
-    && apk --no-cache add git make python g++ libc6-compat >/dev/null \
-    && if [ -n "$OPS_NPM_TOKEN" ]; then echo "//registry.npmjs.org/:_authToken=${NPM_TOKEN:-$OPS_NPM_TOKEN}" > /root/.npmrc; fi \
+RUN  if [ -n "$OPS_NPM_TOKEN" ]; then echo "//registry.npmjs.org/:_authToken=${NPM_TOKEN:-$OPS_NPM_TOKEN}" > /root/.npmrc; fi \
     && npm install \
     && npm cache --force clean \
     && apk del git \
@@ -28,6 +31,7 @@ RUN apk update >/dev/null \
         /tmp/* \
         /var/cache/apk
 
-ENTRYPOINT ./entrypoint.sh
+# Add the Application code
+COPY . . 
 
-EXPOSE 3000
+CMD ["node", "app.js"]

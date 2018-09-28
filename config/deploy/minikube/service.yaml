@@ -19,7 +19,3 @@ spec:
     app: dockertest
   sessionAffinity: None
   type: NodePort
-  # type: LoadBalancer
-  # loadBalancerSourceRanges:
-  # - 0.0.0.0
-  # - ...

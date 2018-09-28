@@ -29,7 +29,7 @@ spec:
     spec:
       containers:
       - name: app
-        image: gcr.io/poc-tier1/dockertest:<%= current_sha %>
+        image: gcr.io/poc-tier1/dockertest
         imagePullPolicy: Never
         envFrom:
         - configMapRef:
