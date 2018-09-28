@@ -18,7 +18,7 @@ spec:
   selector:
     app: dockertest
   sessionAffinity: None
-  type: ClusterIP
+  type: NodePort
   # type: NodePort
   # type: LoadBalancer
   # loadBalancerSourceRanges:

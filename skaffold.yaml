@@ -1,0 +1,9 @@
+apiVersion: skaffold/v1alpha3
+kind: Config
+build:
+  artifacts:
+  - imageName: gcr.io/poc-tier1/dockertest
+deploy:
+  kubectl:
+    manifests:
+      - config/deploy/minikube/*.yaml 
