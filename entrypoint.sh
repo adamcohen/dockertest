@@ -2,4 +2,4 @@
 
 ## nodejs
 
-node api.js
+node app.js
