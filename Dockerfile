@@ -10,15 +10,6 @@ ENV APP=dockertest
 ## nodejs
 WORKDIR /usr/src/app
 
-### new relic
-RUN npm install newrelic \
-    && cp node_modules/newrelic/newrelic.js . \
-    && sed \
-        -e "s/app_name: \['My Application'\],/app_name: ['$NEW_RELIC_APP_NAME'],/" \
-        -e "s/license_key: 'license key here',/license_key: '$NEW_RELIC_LICENSE_KEY',/" \
-        -i newrelic.js
-
-
 COPY . .
 
 ARG NPM_TOKEN=""

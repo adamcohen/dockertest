@@ -34,9 +34,6 @@ spec:
         envFrom:
         - configMapRef:
             name: app-env
-        - secretRef:
-            name: app-secrets
-            optional: false
         ports:
         - containerPort: 3000
           protocol: TCP
